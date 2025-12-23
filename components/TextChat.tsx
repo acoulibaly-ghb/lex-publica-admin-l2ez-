@@ -252,9 +252,8 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     rehypePlugins={[rehypeRaw]}
-                    // @ts-ignore
                     components={{
-                      'qcm-option': ({ node, ...props }: any) => (
+                      ['qcm-option' as any]: ({ node, ...props }: any) => (
                         <button
                           onClick={() => sendMessage(`${props.value}. ${props.children}`)}
                           className={`block w-full text-left px-4 py-3 my-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-${themeColor === 'rose' ? '[#ad5c51]' : 'blue-500'} hover:bg-slate-50 dark:hover:bg-slate-900 transition-all font-medium text-sm group active:scale-[0.98] flex items-center`}
@@ -296,7 +295,7 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
                           {children}
                         </td>
                       )
-                    }}
+                    } as any}
                   >
                     {msg.text}
                   </ReactMarkdown>
@@ -401,3 +400,11 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
     </div>
   );
 };
+
+
+
+
+
+
+
+
