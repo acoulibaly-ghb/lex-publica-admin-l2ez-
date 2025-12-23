@@ -19,6 +19,7 @@ export default async function handler(req: Request) {
         }
 
         const genAI = new GoogleGenAI({ apiKey });
+        // @ts-ignore
         const model = genAI.getGenerativeModel({
             model: 'models/gemini-2.5-flash',
             systemInstruction: `${systemInstruction}\n\nCONTEXTE DU COURS :\n${courseContent}`
