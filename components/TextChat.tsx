@@ -252,6 +252,7 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     rehypePlugins={[rehypeRaw]}
+                    // @ts-ignore
                     components={{
                       'qcm-option': ({ node, ...props }: any) => (
                         <button
@@ -400,11 +401,3 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
     </div>
   );
 };
-
-
-
-
-
-
-
-
