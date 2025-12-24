@@ -23,7 +23,7 @@ const App = () => {
   const [themeColor, setThemeColor] = useState<string>(DEFAULT_THEME_COLOR);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // État pour le menu mobile
 
-  const apiKey = process.env.API_KEY || '';
+  const apiKey = (import.meta.env.VITE_API_KEY as string) || '';
   const teacherPassword = process.env.TEACHER_PASSWORD || 'admin';
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -226,11 +226,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-
-
-
-
