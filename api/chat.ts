@@ -1,7 +1,7 @@
-// Route API Edge pour proxier Gemini sans SDK
-export const config = {
-    runtime: 'edge',
-};
+// Passage en Serverless Function classique pour Ã©viter les timeouts de 10s de l'Edge
+// export const config = {
+//     runtime: 'edge',
+// };
 
 export default async function handler(req: Request) {
     if (req.method !== 'POST') {
@@ -19,10 +19,10 @@ export default async function handler(req: Request) {
             });
         }
 
-        const modelId = 'gemini-2.5-flash';
+        const modelId = 'gemini-1.5-flash';
         const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
-        // Reconstruire l'historique au format attendu par l'API REST
+        // ... (Historique reste identique)
         const contents = messages.map((m: any) => {
             const parts: any[] = [{ text: m.text }];
             if (m.file) {
@@ -57,6 +57,14 @@ export default async function handler(req: Request) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            return new Response(JSON.stringify({ error: `Erreur API Google (${response.status}): ${errorText}` }), {
+                status: response.status,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
 
         const data = await response.json();
 
