@@ -138,7 +138,7 @@ const App = () => {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col h-full overflow-hidden relative">
+      <main className="flex-1 flex flex-col h-full overflow-x-hidden relative">
         <header className="h-16 md:h-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 md:px-8 shrink-0 z-10 pt-[env(safe-area-inset-top)]">
           <div className="flex items-center gap-3 min-w-0">
             <button
