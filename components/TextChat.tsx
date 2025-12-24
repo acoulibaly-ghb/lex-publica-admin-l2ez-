@@ -255,7 +255,13 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
                     components={{
                       ['qcm-option' as any]: ({ node, ...props }: any) => (
                         <button
-                          onClick={() => sendMessage(`${props.value}. ${props.children}`)}
+                          onClick={() => {
+                            const label = String(props.children);
+                            const textToSend = (props.value && props.value !== label)
+                              ? `${props.value}. ${label}`
+                              : label;
+                            sendMessage(textToSend);
+                          }}
                           className={`block w-full text-left px-4 py-3 my-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-${themeColor === 'rose' ? '[#ad5c51]' : 'blue-500'} hover:bg-slate-50 dark:hover:bg-slate-900 transition-all font-medium text-sm group active:scale-[0.98] flex items-center`}
                         >
                           <div className={`flex-shrink-0 w-5 h-5 mr-4 rounded border-2 flex items-center justify-center transition-all ${themeColor === 'rose' ? 'group-hover:border-[#ad5c51]' : 'group-hover:border-blue-600'} border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800`}>
