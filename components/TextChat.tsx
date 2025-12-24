@@ -193,7 +193,7 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
   };
 
   return (
-    <div className="flex h-full max-w-6xl mx-auto w-full bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden relative">
+    <div className="flex h-full max-w-6xl mx-auto w-full bg-white dark:bg-slate-900 md:rounded-xl shadow-sm md:border border-slate-200 dark:border-slate-800 overflow-hidden relative">
       <div className={`absolute inset-y-0 left-0 z-30 flex flex-col w-72 bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-col gap-4">
           <div className="flex items-center justify-between">
@@ -225,13 +225,17 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
       </div>
 
       <div className="flex-1 flex flex-col min-w-0 bg-slate-50/30 dark:bg-slate-950">
-        <header className="p-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between sticky top-0 z-10 shadow-sm">
-          <div className="flex items-center gap-3">
-            <button onClick={() => setIsSidebarOpen(true)} className="p-2 -ml-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><PanelLeft size={20} /></button>
-            <span className="font-serif font-bold text-slate-800 dark:text-white truncate">{activeSession?.title || 'Session de Droit'}</span>
+        <header className="p-2 md:p-4 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between sticky top-0 z-10 shadow-sm shrink-0">
+          <div className="flex items-center gap-1 md:gap-3">
+            <button onClick={() => setIsSidebarOpen(true)} className="p-1.5 md:p-2 -ml-1 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" title="Historique">
+              <PanelLeft size={18} className="md:w-5 md:h-5" />
+            </button>
+            <span className="font-serif font-bold text-xs md:text-base text-slate-800 dark:text-white truncate max-w-[120px] md:max-w-none">
+              {activeSession?.title || 'Session de Droit'}
+            </span>
           </div>
-          <button onClick={() => setIsHelpOpen(true)} className="p-2 text-slate-400 hover:text-amber-500 transition-all active:scale-90" title="Guide d'utilisation">
-            <Lightbulb size={24} />
+          <button onClick={() => setIsHelpOpen(true)} className="p-1.5 md:p-2 text-slate-400 hover:text-amber-500 transition-all active:scale-90" title="Guide d'utilisation">
+            <Lightbulb size={20} className="md:w-6 md:h-6" />
           </button>
         </header>
 
@@ -242,7 +246,7 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
                 {msg.role === 'model' ? <Scale size={20} /> : <User size={20} />}
               </div>
               <div className={`flex flex-col max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
-                <div className={`px-5 py-3.5 rounded-2xl shadow-sm prose prose-sm md:prose-base max-w-none 
+                <div className={`px-4 py-3 md:px-5 md:py-3.5 rounded-2xl shadow-sm prose prose-sm md:prose-base max-w-full overflow-hidden
                      /* Espace entre paragraphes et hauteur de ligne accrue */
                       [&>p]:mb-5 leading-relaxed 
                       ${msg.role === 'user'
@@ -273,9 +277,9 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
                       ),
                       'div': ({ node, className, children, ...props }: any) => {
                         if (className === 'qcm-container') {
-                          return <div className="mt-4 space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 animate-in slide-in-from-bottom-2 duration-300">{children}</div>
+                          return <div className="mt-4 space-y-2 border-t border-slate-100 dark:border-slate-800 pt-4 animate-in slide-in-from-bottom-2 duration-300 w-full">{children}</div>
                         }
-                        return <div {...props}>{children}</div>
+                        return <div {...props} className={`${className} max-w-full overflow-hidden`}>{children}</div>
                       },
                       code: ({ node, inline, className, children, ...props }: any) => {
                         const match = /language-(\w+)/.exec(className || '');
@@ -323,7 +327,7 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
 
         <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
           {/* BOUTONS D'ACTIONS JURIDIQUES */}
-          <div className="flex gap-2 mb-4 overflow-x-auto pb-2 no-scrollbar">
+          <div className="flex gap-2 mb-2 md:mb-4 overflow-x-auto pb-2 no-scrollbar px-1">
             <button onClick={() => handleQuickAction('explication')} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-blue-700 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-100 transition-all whitespace-nowrap"><Gavel size={14} /> Expliquez-moi...</button>
             <button onClick={() => handleQuickAction('dissertation')} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-indigo-700 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 rounded-lg hover:bg-indigo-100 transition-all whitespace-nowrap"><Layout size={14} /> Plan Dissertation</button>
             <button onClick={() => handleQuickAction('cas')} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 rounded-lg hover:bg-emerald-100 transition-all whitespace-nowrap"><FileSignature size={14} /> Cas pratique</button>
@@ -339,8 +343,8 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
               <button onClick={() => setAttachedFile(null)} className="text-slate-400 hover:text-red-500"><Trash2 size={16} /></button>
             </div>
           )}
-          <div className={`relative flex items-end gap-2 bg-slate-50 dark:bg-slate-800/50 p-2 rounded-2xl border-2 border-slate-200 dark:border-slate-700 transition-all focus-within:ring-2 focus-within:ring-${themeColor === 'rose' ? '[#ad5c51]' : 'blue-500'}/10`}>
-            <button onClick={() => fileInputRef.current?.click()} className={`p-3 text-slate-400 hover:${colors.text} hover:${colors.bg} dark:hover:bg-slate-900 rounded-xl transition-all`}><Paperclip size={22} /></button>
+          <div className={`relative flex items-end gap-1 md:gap-2 bg-slate-50 dark:bg-slate-800/50 p-1.5 md:p-2 rounded-2xl border-2 border-slate-200 dark:border-slate-700 transition-all focus-within:ring-2 focus-within:ring-${themeColor === 'rose' ? '[#ad5c51]' : 'blue-500'}/10`}>
+            <button onClick={() => fileInputRef.current?.click()} className={`p-2.5 md:p-3 text-slate-400 hover:${colors.text} hover:${colors.bg} dark:hover:bg-slate-900 rounded-xl transition-all`}><Paperclip size={20} className="md:w-6 md:h-6" /></button>
             <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".pdf" className="hidden" />
             <textarea
               ref={textareaRef}
@@ -349,61 +353,63 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), sendMessage())}
               placeholder="Posez votre question..."
-              className="flex-1 py-3 bg-transparent !border-none outline-none shadow-none focus:ring-0 resize-none text-slate-800 dark:text-white max-h-[200px] text-sm md:text-base"
+              className="flex-1 py-2.5 md:py-3 bg-transparent !border-none outline-none shadow-none focus:ring-0 resize-none text-slate-800 dark:text-white max-h-[150px] md:max-h-[200px] text-sm md:text-base px-1"
             />
-            <button onClick={() => sendMessage()} disabled={(!input.trim() && !attachedFile) || isLoading} className={`p-3 ${colors.primary} text-white rounded-xl ${colors.hover} shadow-lg disabled:opacity-50 active:scale-95 transition-all`}><Send size={20} /></button>
+            <button onClick={() => sendMessage()} disabled={(!input.trim() && !attachedFile) || isLoading} className={`p-2.5 md:p-3 ${colors.primary} text-white rounded-xl ${colors.hover} shadow-lg disabled:opacity-50 active:scale-95 transition-all flex-shrink-0`}><Send size={20} /></button>
           </div>
         </div>
       </div>
       {/* MODALE D'AIDE */}
-      {isHelpOpen && (
-        <div className="absolute inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm transition-opacity">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90%] overflow-hidden border border-slate-200 dark:border-slate-700">
-            <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg">
-                  <Lightbulb size={24} />
+      {
+        isHelpOpen && (
+          <div className="absolute inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm transition-opacity">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90%] overflow-hidden border border-slate-200 dark:border-slate-700">
+              <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg">
+                    <Lightbulb size={24} />
+                  </div>
+                  <h3 className="font-serif font-bold text-lg text-slate-800 dark:text-white">Guide de démarrage</h3>
                 </div>
-                <h3 className="font-serif font-bold text-lg text-slate-800 dark:text-white">Guide de démarrage</h3>
+                <button onClick={() => setIsHelpOpen(false)} className="text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors">
+                  <X size={20} />
+                </button>
               </div>
-              <button onClick={() => setIsHelpOpen(false)} className="text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors">
-                <X size={20} />
-              </button>
-            </div>
 
-            <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-600 dark:text-slate-400">
-              <section className="space-y-2">
-                <h4 className={`font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2`}>
-                  <Paperclip size={18} className={colors.text} />
-                  Analyse de Documents PDF
-                </h4>
-                <p>Utilisez le trombone de la zone de saisie pour joindre un document PDF au chat. L'IA analysera votre document PDF, puis répondra à vos demandes ou questions relativement à son contenu.</p>
-              </section>
+              <div className="p-6 overflow-y-auto space-y-6 text-sm text-slate-600 dark:text-slate-400">
+                <section className="space-y-2">
+                  <h4 className={`font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2`}>
+                    <Paperclip size={18} className={colors.text} />
+                    Analyse de Documents PDF
+                  </h4>
+                  <p>Utilisez le trombone de la zone de saisie pour joindre un document PDF au chat. L'IA analysera votre document PDF, puis répondra à vos demandes ou questions relativement à son contenu.</p>
+                </section>
 
-              <section className="space-y-2">
-                <h4 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                  <Layout size={18} className={colors.text} />
-                  Actions rapides
-                </h4>
-                <p>Les boutons au-dessus de la zone de saisie permettent de générer instantanément un QUIZ, un cas pratique, un plan de dissertation, etc.</p>
-              </section>
+                <section className="space-y-2">
+                  <h4 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <Layout size={18} className={colors.text} />
+                    Actions rapides
+                  </h4>
+                  <p>Les boutons au-dessus de la zone de saisie permettent de générer instantanément un QUIZ, un cas pratique, un plan de dissertation, etc.</p>
+                </section>
 
-              <section className="space-y-2">
-                <h4 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                  <Edit2 size={18} className={colors.text} />
-                  Historique Personnalisé
-                </h4>
-                <p>Renommez ou supprimer vos sessions de discussion dans la barre latérale pour mieux organiser vos thématiques (ex: "Police Administrative", "Recours pour Excès de Pouvoir").</p>
-              </section>
-            </div>
+                <section className="space-y-2">
+                  <h4 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <Edit2 size={18} className={colors.text} />
+                    Historique Personnalisé
+                  </h4>
+                  <p>Renommez ou supprimer vos sessions de discussion dans la barre latérale pour mieux organiser vos thématiques (ex: "Police Administrative", "Recours pour Excès de Pouvoir").</p>
+                </section>
+              </div>
 
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
-              <button onClick={() => setIsHelpOpen(false)} className={`w-full py-3 ${colors.primary} ${colors.hover} text-white rounded-xl font-bold shadow-md transition-all`}>Retourner au Chat</button>
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
+                <button onClick={() => setIsHelpOpen(false)} className={`w-full py-3 ${colors.primary} ${colors.hover} text-white rounded-xl font-bold shadow-md transition-all`}>Retourner au Chat</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 };
 
