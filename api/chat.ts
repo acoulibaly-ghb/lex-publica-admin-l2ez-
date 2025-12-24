@@ -1,7 +1,7 @@
-// Passage en Serverless Function classique pour Ã©viter les timeouts de 10s de l'Edge
-// export const config = {
-//     runtime: 'edge',
-// };
+// Route API Edge haute performance
+export const config = {
+    runtime: 'edge',
+};
 
 export default async function handler(req: Request) {
     if (req.method !== 'POST') {
@@ -13,31 +13,25 @@ export default async function handler(req: Request) {
         const apiKey = process.env.API_KEY || process.env.VITE_API_KEY;
 
         if (!apiKey) {
-            return new Response(JSON.stringify({ error: 'ClÃ© API non configurÃ©e sur le serveur Vercel' }), {
+            return new Response(JSON.stringify({ error: 'ClÃ© API non configurÃ©e' }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        const modelId = 'gemini-1.5-flash';
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
+        // Utilisation du modÃ¨le le plus stable et rapide
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
-        // ... (Historique reste identique)
-        const contents = messages.map((m: any) => {
-            const parts: any[] = [{ text: m.text }];
-            if (m.file) {
-                parts.push({
-                    inlineData: {
-                        mimeType: m.file.mimeType,
-                        data: m.file.data
-                    }
-                });
-            }
-            return {
-                role: m.role === 'model' ? 'model' : 'user',
-                parts
-            };
-        });
+        // On limite l'historique aux 10 derniers messages pour Ã©viter les requÃªtes trop lourdes (Limit 4MB)
+        const recentMessages = messages.slice(-10);
+
+        const contents = recentMessages.map((m: any) => ({
+            role: m.role === 'model' ? 'model' : 'user',
+            parts: [
+                { text: m.text },
+                ...(m.file ? [{ inlineData: { mimeType: m.file.mimeType, data: m.file.data } }] : [])
+            ]
+        }));
 
         const body = {
             contents,
@@ -46,9 +40,7 @@ export default async function handler(req: Request) {
             },
             generationConfig: {
                 temperature: 0.7,
-                topP: 0.95,
-                topK: 40,
-                maxOutputTokens: 8192,
+                maxOutputTokens: 2048,
             }
         };
 
@@ -58,18 +50,13 @@ export default async function handler(req: Request) {
             body: JSON.stringify(body)
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            const errorText = await response.text();
-            return new Response(JSON.stringify({ error: `Erreur API Google (${response.status}): ${errorText}` }), {
+            return new Response(JSON.stringify({ error: data.error?.message || 'Erreur API Google' }), {
                 status: response.status,
                 headers: { 'Content-Type': 'application/json' }
             });
-        }
-
-        const data = await response.json();
-
-        if (data.error) {
-            throw new Error(data.error.message || 'Erreur API Gemini');
         }
 
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "DÃ©solÃ©e, je n'ai pas pu gÃ©nÃ©rer de rÃ©ponse.";
