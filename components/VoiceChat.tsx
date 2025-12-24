@@ -70,7 +70,7 @@ export const VoiceChat: React.FC<VoiceChatProps> = ({ courseContent, systemInstr
       outputNodeRef.current.connect(outputAudioContextRef.current.destination);
 
       const sessionPromise = ai.live.connect({
-        model: 'models/gemini-2.5-flash',
+        model: 'gemini-2.5-flash-native-audio-preview-09-2025',
         config: {
           responseModalities: [Modality.AUDIO],
           systemInstruction: fullSystemInstruction,
@@ -165,6 +165,7 @@ export const VoiceChat: React.FC<VoiceChatProps> = ({ courseContent, systemInstr
     </div>
   );
 };
+
 
 
 
