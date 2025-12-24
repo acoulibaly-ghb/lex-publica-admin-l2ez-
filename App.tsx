@@ -139,7 +139,7 @@ const App = () => {
       </aside>
 
       <main className="flex-1 flex flex-col h-full overflow-hidden relative">
-        <header className="h-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 md:px-8 shrink-0 z-10 pt-[env(safe-area-inset-top)]">
+        <header className="h-16 md:h-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 md:px-8 shrink-0 z-10 pt-[env(safe-area-inset-top)]">
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => setIsSidebarOpen(true)}
@@ -153,17 +153,14 @@ const App = () => {
             <div className="min-w-0">
               <h1 className="font-montserrat tracking-tight text-slate-900 dark:text-white leading-tight">
                 {activeMode === AppMode.TEXT && (
-                  <>
-                    {/* 1) L’agent */}
-                    <span className={`block text-lg md:text-2xl font-semibold truncate ${activeTheme.text}`}>
+                  <div className="flex items-baseline gap-2">
+                    <span className={`text-lg md:text-2xl font-semibold truncate ${activeTheme.text}`}>
                       Ada
                     </span>
-
-                    {/* 2) Le cadre (marque) */}
-                    <span className="block text-sm md:text-xl font-medium truncate">
+                    <span className="text-xs md:text-xl font-medium truncate opacity-80 md:opacity-100">
                       Lex publica <span className="font-normal opacity-70">IA</span>
                     </span>
-                  </>
+                  </div>
                 )}
 
                 {activeMode === AppMode.VOICE && (
@@ -180,7 +177,7 @@ const App = () => {
               </h1>
 
               {/* 3) Garantie académique */}
-              <p className="mt-0.5 text-[10px] md:text-xs text-slate-500 dark:text-slate-400 truncate uppercase tracking-wider font-medium">
+              <p className="hidden md:block mt-0.5 text-[10px] md:text-xs text-slate-500 dark:text-slate-400 truncate uppercase tracking-wider font-medium">
                 <span className={`${activeTheme.text}`}>A. Coulibaly</span> — Droit administratif général
               </p>
             </div>
@@ -192,7 +189,7 @@ const App = () => {
           </div>
         </header>
 
-        <div className="flex-1 p-3 md:p-6 overflow-hidden">
+        <div className="flex-1 p-0 md:p-6 overflow-hidden">
           {activeMode === AppMode.TEXT && (
             <TextChat courseContent={courseContent} systemInstruction={systemInstruction} apiKey={apiKey} themeColor={themeColor} />
           )}
@@ -226,11 +223,4 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-
-
-
 
