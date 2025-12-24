@@ -12,10 +12,13 @@ export default async function handler(req: Request) {
 
     try {
         const { messages, systemInstruction, courseContent } = await req.json();
-        const apiKey = process.env.API_KEY;
+        const apiKey = process.env.API_KEY || process.env.VITE_API_KEY;
 
         if (!apiKey) {
-            return new Response('API Key not configured on server', { status: 500 });
+            return new Response(JSON.stringify({ error: 'ClÃ© API non configurÃ©e sur le serveur Vercel' }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
         }
 
         const genAI = new GoogleGenAI({ apiKey });
