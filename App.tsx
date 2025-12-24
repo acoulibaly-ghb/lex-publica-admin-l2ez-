@@ -189,7 +189,7 @@ const App = () => {
           </div>
         </header>
 
-        <div className="flex-1 p-0 md:p-6 overflow-hidden">
+        <div className="flex-1 p-2 md:p-6 overflow-x-hidden relative">
           {activeMode === AppMode.TEXT && (
             <TextChat courseContent={courseContent} systemInstruction={systemInstruction} apiKey={apiKey} themeColor={themeColor} />
           )}
@@ -223,4 +223,5 @@ const App = () => {
 };
 
 export default App;
+
 
