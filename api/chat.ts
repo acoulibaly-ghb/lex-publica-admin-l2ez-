@@ -20,7 +20,7 @@ export default async function handler(req: Request) {
         }
 
         // Utilisation du modÃ¨le 2.0 Flash (confirmÃ© dans votre liste de modÃ¨les)
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
         // On limite l'historique aux 10 derniers messages pour Ã©viter les requÃªtes trop lourdes (Limit 4MB)
         const recentMessages = messages.slice(-10);
@@ -72,3 +72,4 @@ export default async function handler(req: Request) {
         });
     }
 }
+
