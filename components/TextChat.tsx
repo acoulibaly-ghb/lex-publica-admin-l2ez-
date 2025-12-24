@@ -193,7 +193,7 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
   };
 
   return (
-    <div className="flex h-full max-w-6xl mx-auto w-full bg-white dark:bg-slate-900 md:rounded-xl shadow-sm md:border border-slate-200 dark:border-slate-800 overflow-hidden relative">
+    <div className="flex h-full max-w-6xl mx-auto w-full bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden relative">
       <div className={`absolute inset-y-0 left-0 z-30 flex flex-col w-72 bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-col gap-4">
           <div className="flex items-center justify-between">
@@ -239,13 +239,13 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
           </button>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-2 md:p-6 space-y-4 md:space-y-6">
+        <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-4 md:space-y-6">
           {activeSession?.messages.map((msg, idx) => (
             <div key={idx} className={`flex gap-2 md:gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
               <div className={`flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center ${msg.role === 'model' ? `${colors.primary} text-white shadow-md` : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300'}`}>
                 {msg.role === 'model' ? <Scale size={20} /> : <User size={20} />}
               </div>
-              <div className={`flex flex-col max-w-[80%] md:max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+              <div className={`flex flex-col max-w-[85%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                 <div className={`px-4 py-3 md:px-5 md:py-3.5 rounded-2xl shadow-sm prose prose-sm md:prose-base max-w-full overflow-hidden
                      /* Espace entre paragraphes et hauteur de ligne accrue */
                       [&>p]:mb-5 leading-relaxed 
@@ -412,11 +412,4 @@ export const TextChat: React.FC<TextChatProps> = ({ courseContent, systemInstruc
     </div >
   );
 };
-
-
-
-
-
-
-
 
