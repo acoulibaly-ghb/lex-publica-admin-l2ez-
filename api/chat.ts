@@ -1,6 +1,4 @@
-
-import { GoogleGenAI } from '@google/genai';
-
+// Route API Edge pour proxier Gemini sans SDK
 export const config = {
     runtime: 'edge',
 };
@@ -21,27 +19,52 @@ export default async function handler(req: Request) {
             });
         }
 
-        const genAI = new GoogleGenAI({ apiKey });
-        // @ts-ignore
-        const model = genAI.getGenerativeModel({
-            model: 'models/gemini-2.5-flash',
-            systemInstruction: `${systemInstruction}\n\nCONTEXTE DU COURS :\n${courseContent}`
+        const modelId = 'gemini-2.5-flash';
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
+
+        // Reconstruire l'historique au format attendu par l'API REST
+        const contents = messages.map((m: any) => {
+            const parts: any[] = [{ text: m.text }];
+            if (m.file) {
+                parts.push({
+                    inlineData: {
+                        mimeType: m.file.mimeType,
+                        data: m.file.data
+                    }
+                });
+            }
+            return {
+                role: m.role === 'model' ? 'model' : 'user',
+                parts
+            };
         });
 
-        // We take the last message as the prompt
-        const lastMessage = messages[messages.length - 1];
-        const history = messages.slice(0, -1).map((m: any) => ({
-            role: m.role,
-            parts: [{ text: m.text }, ...(m.file ? [{ inlineData: { data: m.file.data, mimeType: m.file.mimeType } }] : [])]
-        }));
+        const body = {
+            contents,
+            systemInstruction: {
+                parts: [{ text: `${systemInstruction}\n\nCONTEXTE DU COURS :\n${courseContent}` }]
+            },
+            generationConfig: {
+                temperature: 0.7,
+                topP: 0.95,
+                topK: 40,
+                maxOutputTokens: 8192,
+            }
+        };
 
-        const chat = model.startChat({
-            history: history,
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
         });
 
-        const result = await chat.sendMessage([{ text: lastMessage.text }, ...(lastMessage.file ? [{ inlineData: { data: lastMessage.file.data, mimeType: lastMessage.file.mimeType } }] : [])]);
-        const response = await result.response;
-        const text = response.text();
+        const data = await response.json();
+
+        if (data.error) {
+            throw new Error(data.error.message || 'Erreur API Gemini');
+        }
+
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "DÃ©solÃ©e, je n'ai pas pu gÃ©nÃ©rer de rÃ©ponse.";
 
         return new Response(JSON.stringify({ text }), {
             headers: { 'Content-Type': 'application/json' },
